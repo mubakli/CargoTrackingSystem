@@ -2,20 +2,51 @@ import sqlite3
 import random
 from datetime import datetime, timedelta
 
+from CustomerDataManagment import Customer
+
+if __name__ == "__main__":
+    # Create a new customer
+    customer = Customer(1, "John Doe")
+    customer.save_customer()
+
+    # Add shipping records
+    #customer.add_shipping(101, "2024-12-10", "Delivered", 2)
+    #customer.add_shipping(102, "2024-12-05", "Pending", 5)
+    #customer.add_shipping(103, "2024-12-12", "Delivered", 1)
+
+    # Display shipping history (linked list)
+    customer.display_shipping_history()
+
+    # Reload the shipping history from the database
+    print("\nReloading from the database:")
+    customer.load_shipping_history()
+    customer.display_shipping_history()
+
+
+
+
+
+
+
+
+
+
+""""
 # Veritabanı bağlantısını oluştur
 conn = sqlite3.connect("CargoTrackingSystem.db", check_same_thread=False)
 cursor = conn.cursor()
 
 # Tablo oluşturma
-cursor.execute("""
+
+cursor.execute(
 CREATE TABLE IF NOT EXISTS Customers (
     CustomerID INTEGER PRIMARY KEY AUTOINCREMENT,
     FirstName TEXT NOT NULL,
     LastName TEXT NOT NULL
 );
-""")
+)
 
-cursor.execute("""
+cursor.execute(
 CREATE TABLE IF NOT EXISTS Shipments (
     ShipmentID INTEGER PRIMARY KEY AUTOINCREMENT,
     CustomerID INTEGER NOT NULL,
@@ -24,7 +55,7 @@ CREATE TABLE IF NOT EXISTS Shipments (
     DeliveryTime INTEGER NOT NULL,
     FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
 );
-""")
+)
 
 # Basit Python arayüzü için gerekli kütüphaneler
 import tkinter as tk
@@ -201,3 +232,4 @@ prioritize_button.pack(side="left", padx=5, pady=5)
 show_customers_tab()
 
 root.mainloop()
+"""
