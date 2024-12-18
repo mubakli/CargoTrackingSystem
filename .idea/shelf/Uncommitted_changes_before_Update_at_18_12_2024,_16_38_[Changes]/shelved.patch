@@ -1,0 +1,63 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"f7006ce5-ea61-4450-a61b-dd7fb3b231a8\" name=\"Changes\" comment=\"installed sqlite.\">\n      <change afterPath=\"$PROJECT_DIR$/.idea/dataSources.xml\" afterDir=\"false\" />\n      <change afterPath=\"$PROJECT_DIR$/CustomerDataManagment.py\" afterDir=\"false\" />\n      <change afterPath=\"$PROJECT_DIR$/tests/test_CustomerDataManagment.py\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/CargoTrackingSystem.iml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/CargoTrackingSystem.iml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/misc.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/misc.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/Main.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/Main.py\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Python Script\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"GitHubPullRequestSearchHistory\">{\n  &quot;lastFilter&quot;: {\n    &quot;state&quot;: &quot;OPEN&quot;,\n    &quot;assignee&quot;: &quot;mubakli&quot;\n  }\n}</component>\n  <component name=\"GithubPullRequestsUISettings\">{\n  &quot;selectedUrlAndAccountId&quot;: {\n    &quot;url&quot;: &quot;https://github.com/mubakli/CargoTrackingSystem.git&quot;,\n    &quot;accountId&quot;: &quot;ff48d11b-91de-4531-a3bc-3d6cdcb3fd1d&quot;\n  }\n}</component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 8\n}</component>\n  <component name=\"ProjectId\" id=\"2qAQxFAkt9KlPZBG7jpzaY5uL6A\" />\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">{\n  &quot;keyToString&quot;: {\n    &quot;Python.CustomerDataManagment.executor&quot;: &quot;Run&quot;,\n    &quot;Python.Main.executor&quot;: &quot;Run&quot;,\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\n    &quot;git-widget-placeholder&quot;: &quot;master&quot;,\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\n    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\n  }\n}</component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-PY-243.22562.180\" />\n        <option value=\"bundled-python-sdk-85c76a3b01b3-9a18a617cbe4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.22562.180\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"f7006ce5-ea61-4450-a61b-dd7fb3b231a8\" name=\"Changes\" comment=\"\" />\n      <created>1734103144498</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1734103144498</updated>\n      <workItem from=\"1734103145521\" duration=\"952000\" />\n      <workItem from=\"1734257925544\" duration=\"9656000\" />\n      <workItem from=\"1734352745615\" duration=\"677000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"Hello\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1734103373407</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1734103373407</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"print(&quot;Hello world&quot;);\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1734103771738</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1734103771738</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"3\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State />\n          </value>\n        </entry>\n      </map>\n    </option>\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"Hello\" />\n    <MESSAGE value=\"print(&quot;Hello world&quot;);\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"print(&quot;Hello world&quot;);\" />\n  </component>\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\n    <SUITE FILE_PATH=\"coverage/CargoTrackingSystem$CustomerDataManagment.coverage\" NAME=\"CustomerDataManagment Coverage Results\" MODIFIED=\"1734263032992\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n    <SUITE FILE_PATH=\"coverage/CargoTrackingSystem$Main.coverage\" NAME=\"Main Coverage Results\" MODIFIED=\"1734270263766\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"coverage.py\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" WORKING_DIRECTORY=\"$PROJECT_DIR$\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision d869dc6e109a35aad0a0c29bd79c5d9d216a9f09)
++++ b/.idea/workspace.xml	(date 1734466782364)
+@@ -4,14 +4,8 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="f7006ce5-ea61-4450-a61b-dd7fb3b231a8" name="Changes" comment="installed sqlite.">
+-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/CustomerDataManagment.py" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/tests/test_CustomerDataManagment.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/CargoTrackingSystem.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CargoTrackingSystem.iml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++    <list default="true" id="f7006ce5-ea61-4450-a61b-dd7fb3b231a8" name="Changes" comment="Customer Data Management added.Linked List Used.">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -84,7 +78,8 @@
+       <updated>1734103144498</updated>
+       <workItem from="1734103145521" duration="952000" />
+       <workItem from="1734257925544" duration="9656000" />
+-      <workItem from="1734352745615" duration="677000" />
++      <workItem from="1734352745615" duration="2141000" />
++      <workItem from="1734466779088" duration="4000" />
+     </task>
+     <task id="LOCAL-00001" summary="Hello">
+       <option name="closed" value="true" />
+@@ -102,7 +97,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1734103771738</updated>
+     </task>
+-    <option name="localTasksCounter" value="3" />
++    <task id="LOCAL-00003" summary="Customer Data Management added.Linked List Used.">
++      <option name="closed" value="true" />
++      <created>1734355102564</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1734355102564</updated>
++    </task>
++    <option name="localTasksCounter" value="4" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -122,7 +125,8 @@
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="Hello" />
+     <MESSAGE value="print(&quot;Hello world&quot;);" />
+-    <option name="LAST_COMMIT_MESSAGE" value="print(&quot;Hello world&quot;);" />
++    <MESSAGE value="Customer Data Management added.Linked List Used." />
++    <option name="LAST_COMMIT_MESSAGE" value="Customer Data Management added.Linked List Used." />
+   </component>
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+     <SUITE FILE_PATH="coverage/CargoTrackingSystem$CustomerDataManagment.coverage" NAME="CustomerDataManagment Coverage Results" MODIFIED="1734263032992" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
