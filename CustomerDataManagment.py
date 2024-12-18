@@ -15,11 +15,11 @@ class Customer:
         self.customer_id = customer_id
         self.name = name
         self.shipping_history_head = None
-        self.connect = sqlite3.connect('shipping.db')
+        self.connect = sqlite3.connect('shared_database.db')  # Shared database
         self.create_tables()
 
     def create_tables(self):
-        # Create tables if they don't exist
+        # Create tables for customers and their shipping history
         with self.connect:
             self.connect.execute("""
             CREATE TABLE IF NOT EXISTS customers (
@@ -39,7 +39,7 @@ class Customer:
             """)
 
     def save_customer(self):
-        # Insert customer into the 'customers' table if they don't already exist
+        # Save the customer to the database
         with self.connect:
             self.connect.execute("""
             INSERT OR IGNORE INTO customers (customer_id, name)
@@ -47,22 +47,19 @@ class Customer:
             """, (self.customer_id, self.name))
 
     def add_shipping(self, shipping_id, shipping_date, delivery_status, delivery_time):
-        # Add new shipping record to both the linked list and the database
+        # Add a shipping record to the linked list and database
         new_shipping = ShippingHistoryNode(shipping_id, shipping_date, delivery_status, delivery_time)
 
         if not self.shipping_history_head or self.shipping_history_head.shipping_date > shipping_date:
-            # Insert at the head if the list is empty or the new shipping date is earlier
             new_shipping.next = self.shipping_history_head
             self.shipping_history_head = new_shipping
         else:
-            # Traverse the list to find the correct insertion point based on shipping_date
             current = self.shipping_history_head
             while current.next and current.next.shipping_date <= shipping_date:
                 current = current.next
             new_shipping.next = current.next
             current.next = new_shipping
 
-        # Insert the shipping information into the database
         with self.connect:
             self.connect.execute("""
             INSERT OR REPLACE INTO shipping_history (shipping_id, shipping_date, delivery_status, delivery_time, customer_id)
@@ -70,7 +67,7 @@ class Customer:
             """, (shipping_id, shipping_date, delivery_status, delivery_time, self.customer_id))
 
     def load_shipping_history(self):
-        # Load shipping history from the database and reconstruct the linked list
+        # Load shipping history from the database
         cursor = self.connect.cursor()
         cursor.execute("""
         SELECT shipping_id, shipping_date, delivery_status, delivery_time
@@ -79,8 +76,6 @@ class Customer:
         ORDER BY shipping_date ASC
         """, (self.customer_id,))
         rows = cursor.fetchall()
-
-        # Rebuild the linked list from the database rows
         self.shipping_history_head = None
         for row in rows:
             self.add_shipping(row[0], row[1], row[2], row[3])

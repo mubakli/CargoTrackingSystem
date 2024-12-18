@@ -1,14 +1,15 @@
 import sqlite3
 import heapq
 
+
 class GlobalPriorityQueue:
-    def __init__(self,):
+    def __init__(self):
         self.queue = []  # In-memory heap
-        self.connect = sqlite3.connect("priority.db") # Use the same database connection
+        self.connect = sqlite3.connect("shared_database.db")  # Shared database
         self.create_priority_queue_table()
 
     def create_priority_queue_table(self):
-        # Create the priority queue table within the same database
+        # Create the priority queue table within the shared database (if needed)
         with self.connect:
             self.connect.execute("""
             CREATE TABLE IF NOT EXISTS priority_queue (
@@ -20,30 +21,24 @@ class GlobalPriorityQueue:
             );
             """)
 
-    def add_cargo(self, shipping_id, customer_id, delivery_time, status):
-        # Add cargo to the in-memory queue and database
-        heapq.heappush(self.queue, (delivery_time, shipping_id, customer_id, status))
-        with self.connect:
-            self.connect.execute("""
-            INSERT OR REPLACE INTO priority_queue (shipping_id, customer_id, delivery_time, status)
-            VALUES (?, ?, ?, ?)
-            """, (shipping_id, customer_id, delivery_time, status))
-
-    def load_queue(self):
-        # Load all cargos from the database into the in-memory queue
+    def populate_from_shipping_history(self):
+        # Automatically populate the priority queue from the shipping history table
         cursor = self.connect.cursor()
         cursor.execute("""
-        SELECT delivery_time, shipping_id, customer_id, status
-        FROM priority_queue
+        SELECT shipping_id, customer_id, delivery_time, delivery_status
+        FROM shipping_history
         """)
         rows = cursor.fetchall()
+
+        # Add all records to the in-memory priority queue
         self.queue = []
         for row in rows:
-            heapq.heappush(self.queue, (row[0], row[1], row[2], row[3]))
+            delivery_time, shipping_id, customer_id, status = row[2], row[0], row[1], row[3]
+            heapq.heappush(self.queue, (delivery_time, shipping_id, customer_id, status))
 
     def process_next_cargo(self):
         if self.queue:
-            # Remove the highest priority cargo from the heap and database
+            # Process the highest-priority cargo and remove it from the queue
             delivery_time, shipping_id, customer_id, status = heapq.heappop(self.queue)
             with self.connect:
                 self.connect.execute("""
@@ -60,11 +55,10 @@ class GlobalPriorityQueue:
             return None
 
     def display_queue(self):
-        # Display the in-memory queue
+        # Display the current state of the priority queue
         print("Global Priority Queue:")
         for delivery_time, shipping_id, customer_id, status in self.queue:
             print(f"Customer ID: {customer_id}, Shipping ID: {shipping_id}, Delivery Time: {delivery_time}, Status: {status}")
-
 
 
 
