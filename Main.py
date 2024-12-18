@@ -17,6 +17,7 @@ def main():
     customer3.add_shipping(104, "2024-12-09", "In Transit", 9)
     customer4.add_shipping(105, "2024-12-03", "Delivered", 7)
     customer2.add_shipping(106, "2024-12-02", "In Transit", 2)
+    customer3.add_shipping(107, "2024-12-10", "In Transit", 1)
 
     # Global Priority Queue - Automatically populate from shipping history
     priority_queue = GlobalPriorityQueue()
