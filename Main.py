@@ -2,6 +2,7 @@ import sqlite3
 import random
 from datetime import datetime, timedelta
 
+from CargoPriority import  GlobalPriorityQueue
 from CustomerDataManagment import Customer
 
 if __name__ == "__main__":
@@ -22,14 +23,38 @@ if __name__ == "__main__":
     customer.load_shipping_history()
     customer.display_shipping_history()
 
+    customer1 = Customer(1, "Alice Smith")
+    customer1.save_customer()
+    customer1.add_shipping(101, "2024-12-01", "Delivered", 3)
+    customer1.add_shipping(102, "2024-12-03", "Not Delivered", 5)
+    customer1.add_shipping(103, "2024-12-02", "Delivered", 2)
 
+    print("\nShipping History for Alice Smith:")
 
+    customer1.display_shipping_history()
+    print("-------------------------------------------------")
 
+    gpq = GlobalPriorityQueue()
 
+    # Add cargos to the global priority queue
+    gpq.add_cargo(101, 1, 3, "Processing")  # Customer 1
+    gpq.add_cargo(102, 2, 5, "In Transit")  # Customer 2
+    gpq.add_cargo(103, 1, 2, "Delivered")  # Customer 1
+    gpq.add_cargo(104, 3, 4, "Pending")  # Customer 3
 
+    # Reload queue from the database (simulate restarting the program)
+    gpq.load_queue()
 
+    print("\nGlobal Priority Queue before processing:")
+    gpq.display_queue()
 
-
+    print("\nProcessing cargos by priority:")
+    while True:
+        next_cargo = gpq.process_next_cargo()
+        if not next_cargo:
+            break
+        print(
+            f"Processed Cargo - Customer ID: {next_cargo['customer_id']}, Shipping ID: {next_cargo['shipping_id']}, Delivery Time: {next_cargo['delivery_time']}, Status: {next_cargo['status']}")
 
 """"
 # Veritabanı bağlantısını oluştur
