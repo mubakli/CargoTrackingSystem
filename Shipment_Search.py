@@ -151,7 +151,7 @@ def search_delivered_shipment():
     shipment_id = int(entry_delivered_shipment_id.get())
     result = binary_search(delivered_shipments, shipment_id)
     if result:
-        messagebox.showinfo("Shipment Found", f"ID: {result[0]}, Date: {result[1]}, Status: {result[2]}, Time: {result[3]}")
+        messagebox.showinfo("Gönderi bulundu", f"ID: {result[0]}, Date: {result[1]}, Status: {result[2]}, Time: {result[3]}")
     else:
         messagebox.showwarning("Not Found", "Shipment not found.")
 
