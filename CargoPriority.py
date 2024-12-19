@@ -67,7 +67,7 @@ class GlobalPriorityQueue:
 
 
 """WİTH OUT DATABASE CODE"""
-"""
+
 class PriorityQueue:
     def __init__(self):
         self.queue = []
@@ -91,4 +91,3 @@ class PriorityQueue:
         print("Priority Queue:")
         for delivery_time, shipping_id, status in self.queue:
             print(f"ID: {shipping_id}, Delivery Time: {delivery_time}, Status: {status}")
-"""

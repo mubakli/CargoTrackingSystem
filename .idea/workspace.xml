@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7006ce5-ea61-4450-a61b-dd7fb3b231a8" name="Changes" comment="Sabır ve zaman, şiddet ve öfkenin yapabileceğinden çok daha fazla iş başarır. Tree yapısı eklendi.">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="f7006ce5-ea61-4450-a61b-dd7fb3b231a8" name="Changes" comment="priority queue and Customer database merged.">
+      <change afterPath="$PROJECT_DIR$/tests/tree4.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CargoPriority.py" beforeDir="false" afterPath="$PROJECT_DIR$/CargoPriority.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,34 +47,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Python tests.Python tests in test_CustomerDataManagment.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python.CustomerDataManagment.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.MyTestZone.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Shipment_Search.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Shipment_Search1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Shipment_Search3.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Shipment_Search4.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Shipment_Search5.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Stack_shipping_history.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Tree.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/emira/PycharmProjects/CargoTrackingSystem&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python tests.Python tests in test_CustomerDataManagment.py.executor": "Run",
+    "Python.CustomerDataManagment.executor": "Run",
+    "Python.Main.executor": "Run",
+    "Python.MyTestZone.executor": "Run",
+    "Python.Shipment_Search.executor": "Run",
+    "Python.Shipment_Search1.executor": "Run",
+    "Python.Shipment_Search3.executor": "Run",
+    "Python.Shipment_Search4.executor": "Run",
+    "Python.Shipment_Search5.executor": "Run",
+    "Python.Stack_shipping_history.executor": "Run",
+    "Python.Tree.executor": "Run",
+    "Python.tree4.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/emira/PycharmProjects/CargoTrackingSystem",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.stickyLines",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\emira\PycharmProjects\CargoTrackingSystem" />
@@ -143,7 +144,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734546500707</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="priority queue and Customer database merged.">
+      <option name="closed" value="true" />
+      <created>1734550901414</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1734550901414</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -167,19 +176,21 @@
     <MESSAGE value="Updated my test zone" />
     <MESSAGE value="Testing Shipment search with multiple files." />
     <MESSAGE value="Sabır ve zaman, şiddet ve öfkenin yapabileceğinden çok daha fazla iş başarır. Tree yapısı eklendi." />
-    <option name="LAST_COMMIT_MESSAGE" value="Sabır ve zaman, şiddet ve öfkenin yapabileceğinden çok daha fazla iş başarır. Tree yapısı eklendi." />
+    <MESSAGE value="priority queue and Customer database merged." />
+    <option name="LAST_COMMIT_MESSAGE" value="priority queue and Customer database merged." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CargoTrackingSystem$CustomerDataManagment.coverage" NAME="CustomerDataManagment Coverage Results" MODIFIED="1734263032992" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CargoTrackingSystem$Shipment_Search.coverage" NAME="Shipment_Search Coverage Results" MODIFIED="1734542254889" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CargoTrackingSystem$Shipment_Search5.coverage" NAME="Shipment_Search5 Coverage Results" MODIFIED="1734459686521" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CargoTrackingSystem$Shipment_Search.coverage" NAME="Shipment_Search Coverage Results" MODIFIED="1734588748641" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CargoTrackingSystem$Shipment_Search3.coverage" NAME="Shipment_Search3 Coverage Results" MODIFIED="1734458980686" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CargoTrackingSystem$.coverage" NAME=" Coverage Results" MODIFIED="1734504676467" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/CargoTrackingSystem$Shipment_Search4.coverage" NAME="Shipment_Search4 Coverage Results" MODIFIED="1734459701433" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CargoTrackingSystem$Shipment_Search1.coverage" NAME="Shipment_Search1 Coverage Results" MODIFIED="1734505045948" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CargoTrackingSystem$Stack_shipping_history.coverage" NAME="Stack_shipping_history Coverage Results" MODIFIED="1734542248066" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CargoTrackingSystem$Main.coverage" NAME="Main Coverage Results" MODIFIED="1734550693791" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CargoTrackingSystem$MyTestZone.coverage" NAME="MyTestZone Coverage Results" MODIFIED="1734505233538" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CargoTrackingSystem$Tree.coverage" NAME="Tree Coverage Results" MODIFIED="1734547013104" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CargoTrackingSystem$Shipment_Search5.coverage" NAME="Shipment_Search5 Coverage Results" MODIFIED="1734459686521" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CargoTrackingSystem$CustomerDataManagment.coverage" NAME="CustomerDataManagment Coverage Results" MODIFIED="1734263032992" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CargoTrackingSystem$tree4.coverage" NAME="tree4 Coverage Results" MODIFIED="1734636188375" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/CargoTrackingSystem$Stack_shipping_history.coverage" NAME="Stack_shipping_history Coverage Results" MODIFIED="1734542248066" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CargoTrackingSystem$Tree.coverage" NAME="Tree Coverage Results" MODIFIED="1734600453267" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
