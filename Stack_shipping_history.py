@@ -40,7 +40,7 @@ def fetch_shipping_history(customer_id):
     conn = sqlite3.connect('shipping.db')
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT shipping_id, shipping_date, delivery_status, delivery_time
+        SELECT shipping_id, shipping_date, delivery_status, delivery_time, target_city_id
         FROM shipping_history
         WHERE customer_id = ?
         ORDER BY shipping_date DESC
@@ -64,7 +64,7 @@ def display_shipping_history(customer_id):
         for status, shipment_list in categorized_shipments.items():
             print(f"\n{status} Shipments:")
             for shipment in shipment_list:
-                print(f"Shipping ID: {shipment[0]}, Date: {shipment[1]}, Time: {shipment[3]}")
+                print(f"Shipping ID: {shipment[0]}, Date: {shipment[1]}, Time: {shipment[3]}, Target City ID: {shipment[4]}")
     except ValueError as e:
         print(e)
 
@@ -79,6 +79,8 @@ def show_customer_shipments(event):
         shipments_tree.insert("", "end", values=shipment)
 
 def main():
+    global customers_tree, shipments_tree
+
     # Tkinter UI
     root = tk.Tk()
     root.title("Shipping History")
@@ -103,11 +105,12 @@ def main():
     frame_shipments = ttk.Frame(root)
     frame_shipments.pack(side="right", fill="both", expand=True)
 
-    shipments_tree = ttk.Treeview(frame_shipments, columns=("ID", "Date", "Status", "Time"), show="headings")
+    shipments_tree = ttk.Treeview(frame_shipments, columns=("ID", "Date", "Status", "Time", "Target City ID"), show="headings")
     shipments_tree.heading("ID", text="ID")
     shipments_tree.heading("Date", text="Date")
     shipments_tree.heading("Status", text="Status")
     shipments_tree.heading("Time", text="Time")
+    shipments_tree.heading("Target City ID", text="Target City ID")
     shipments_tree.pack(expand=True, fill="both")
 
     customers_tree.bind("<Double-1>", show_customer_shipments)
