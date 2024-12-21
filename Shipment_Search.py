@@ -1,12 +1,11 @@
 """
-Kargo Durum Sorgulama (Sorting &amp; Searching)
+Kargo Durum Sorgulama (Sorting & Searching)
 Sistem, kargo durumlarını sorgulamak için sıralama ve arama algoritmalarını
 kullanmalıdır.
  Teslim Edilmiş Kargolar:
 o Kargo ID’ye göre binary search algoritması kullanılarak bulunmalıdır.
 o Arama işlemi sırasında sorted list kullanılmalıdır.
  Teslim Edilmemiş Kargolar:
-
 o Teslimat süresine göre merge sort veya quick sort kullanılarak
 sıralanmalıdır.
 o Sıralama işleminin zaman karmaşıklığı analiz edilmelidir.
@@ -29,7 +28,6 @@ Ayrıca sıralama işlemi sırasında kullanılan veri yapısı da belirtilmelid
 Ayrıca bir arayüz ile kullanıcıya kargo sorgulama imkanı sunulmalıdır.
 """
 
-
 import sqlite3
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -43,7 +41,8 @@ def create_shipping_history_table():
             shipping_date TEXT,
             delivery_status TEXT,
             delivery_time INTEGER,
-            customer_id INTEGER
+            customer_id INTEGER,
+            target_city_id INTEGER
         )
     """)
     conn.commit()
@@ -53,7 +52,7 @@ def fetch_shipping_history(customer_id):
     conn = sqlite3.connect('shipping.db')
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT shipping_id, shipping_date, delivery_status, delivery_time, customer_id
+        SELECT shipping_id, shipping_date, delivery_status, delivery_time, customer_id, target_city_id
         FROM shipping_history
         WHERE customer_id = ?
         ORDER BY shipping_date DESC
@@ -67,14 +66,14 @@ def fetch_undelivered_shipments(customer_id=None):
     cursor = conn.cursor()
     if customer_id:
         cursor.execute("""
-            SELECT shipping_id, shipping_date, delivery_status, delivery_time, customer_id
+            SELECT shipping_id, shipping_date, delivery_status, delivery_time, customer_id, target_city_id
             FROM shipping_history
             WHERE customer_id = ? AND delivery_status != 'Delivered'
             ORDER BY delivery_time
         """, (customer_id,))
     else:
         cursor.execute("""
-            SELECT shipping_id, shipping_date, delivery_status, delivery_time, customer_id
+            SELECT shipping_id, shipping_date, delivery_status, delivery_time, customer_id, target_city_id
             FROM shipping_history
             WHERE delivery_status != 'Delivered'
             ORDER BY delivery_time
@@ -95,36 +94,6 @@ def binary_search(shipments, shipment_id):
             right = mid - 1
     return None
 
-def merge_sort(shipments):
-    if len(shipments) > 1:
-        mid = len(shipments) // 2
-        left_half = shipments[:mid]
-        right_half = shipments[mid:]
-
-        merge_sort(left_half)
-        merge_sort(right_half)
-
-        i = j = k = 0
-        while i < len(left_half) and j < len(right_half):
-            if left_half[i][3] < right_half[j][3]:
-                shipments[k] = left_half[i]
-                i += 1
-            else:
-                shipments[k] = right_half[j]
-                j += 1
-            k += 1
-
-        while i < len(left_half):
-            shipments[k] = left_half[i]
-            i += 1
-            k += 1
-
-        while j < len(right_half):
-            shipments[k] = right_half[j]
-            j += 1
-            k += 1
-    return shipments
-
 def quick_sort(shipments):
     if len(shipments) <= 1:
         return shipments
@@ -139,28 +108,25 @@ def display_delivered_shipments(shipments):
     delivered_shipments.sort(key=lambda x: x[0])  # Sort by shipping_id
     return delivered_shipments
 
-def display_undelivered_shipments(shipments, sort_algorithm):
+def display_undelivered_shipments(shipments):
     undelivered_shipments = [s for s in shipments if s[2] != 'Delivered']
-    if sort_algorithm == "Merge Sort":
-        sorted_shipments = merge_sort(undelivered_shipments)
-    elif sort_algorithm == "Quick Sort":
-        sorted_shipments = quick_sort(undelivered_shipments)
+    sorted_shipments = quick_sort(undelivered_shipments)
     return sorted_shipments
 
 def search_delivered_shipment():
     shipment_id = int(entry_delivered_shipment_id.get())
     result = binary_search(delivered_shipments, shipment_id)
     if result:
-        messagebox.showinfo("Gönderi bulundu", f"ID: {result[0]}, Date: {result[1]}, Status: {result[2]}, Time: {result[3]}")
+        messagebox.showinfo("Shipment Found", f"ID: {result[0]}, Date: {result[1]}, Status: {result[2]}, Time: {result[3]}, Customer ID: {result[4]}, Target City ID: {result[5]}")
     else:
         messagebox.showwarning("Not Found", "Shipment not found.")
 
 def search_undelivered_shipment():
     shipment_id = int(entry_undelivered_shipment_id.get())
-    sorted_shipments = display_undelivered_shipments(undelivered_shipments, "Merge Sort")  # Default to Merge Sort
+    sorted_shipments = display_undelivered_shipments(undelivered_shipments)
     result = binary_search(sorted_shipments, shipment_id)
     if result:
-        messagebox.showinfo("Shipment Found", f"ID: {result[0]}, Date: {result[1]}, Status: {result[2]}, Time: {result[3]}")
+        messagebox.showinfo("Shipment Found", f"ID: {result[0]}, Date: {result[1]}, Status: {result[2]}, Time: {result[3]}, Customer ID: {result[4]}, Target City ID: {result[5]}")
     else:
         messagebox.showwarning("Not Found", "Shipment not found.")
 
@@ -172,8 +138,9 @@ def show_undelivered_shipments():
         customer_id = None
     shipments_tree.delete(*shipments_tree.get_children())
     shipments = fetch_undelivered_shipments(customer_id)
-    sorted_shipments = display_undelivered_shipments(shipments, "Merge Sort")  # Default to Merge Sort
-    for shipment in sorted_shipments:
+    global undelivered_shipments
+    undelivered_shipments = display_undelivered_shipments(shipments)
+    for shipment in undelivered_shipments:
         shipments_tree.insert("", "end", values=shipment)
 
 def show_customer_shipments(event):
@@ -183,6 +150,9 @@ def show_customer_shipments(event):
     customer_id = customers_tree.item(selected_item, "values")[0]
     shipments_tree.delete(*shipments_tree.get_children())
     shipments = fetch_shipping_history(customer_id)
+    global delivered_shipments, undelivered_shipments
+    delivered_shipments = display_delivered_shipments(shipments)
+    undelivered_shipments = display_undelivered_shipments(shipments)
     for shipment in shipments:
         shipments_tree.insert("", "end", values=shipment)
 
@@ -190,76 +160,85 @@ def reset_selection():
     customers_tree.selection_remove(customers_tree.selection())
     show_undelivered_shipments()
 
-# Create the shipping_history table if it does not exist
-create_shipping_history_table()
+def main():
+    global entry_delivered_shipment_id, entry_undelivered_shipment_id, customers_tree, shipments_tree
 
-# Fetch shipments from database
-customer_id = 1  # Example customer_id
-shipments = fetch_shipping_history(customer_id)
-delivered_shipments = display_delivered_shipments(shipments)
-undelivered_shipments = display_undelivered_shipments(shipments, "Merge Sort")
+    # Create the shipping_history table if it does not exist
+    create_shipping_history_table()
 
-# Tkinter UI
-root = tk.Tk()
-root.title("Shipment Status Query")
+    # Fetch shipments from database
+    customer_id = 1  # Example customer_id
+    shipments = fetch_shipping_history(customer_id)
+    global delivered_shipments, undelivered_shipments
+    delivered_shipments = display_delivered_shipments(shipments)
+    undelivered_shipments = display_undelivered_shipments(shipments)
 
-frame_search_delivered = ttk.Frame(root)
-frame_search_delivered.pack(side="top", fill="x", padx=10, pady=10)
+    # Tkinter UI
+    root = tk.Tk()
+    root.title("Shipment Status Query")
 
-label_delivered_shipment_id = ttk.Label(frame_search_delivered, text="Enter Delivered Shipment ID:")
-label_delivered_shipment_id.pack(side="left")
+    frame_search_delivered = ttk.Frame(root)
+    frame_search_delivered.pack(side="top", fill="x", padx=10, pady=10)
 
-entry_delivered_shipment_id = ttk.Entry(frame_search_delivered)
-entry_delivered_shipment_id.pack(side="left", padx=5)
+    label_delivered_shipment_id = ttk.Label(frame_search_delivered, text="Enter Delivered Shipment ID:")
+    label_delivered_shipment_id.pack(side="left")
 
-button_search_delivered = ttk.Button(frame_search_delivered, text="Search Delivered", command=search_delivered_shipment)
-button_search_delivered.pack(side="left", padx=5)
+    entry_delivered_shipment_id = ttk.Entry(frame_search_delivered)
+    entry_delivered_shipment_id.pack(side="left", padx=5)
 
-frame_search_undelivered = ttk.Frame(root)
-frame_search_undelivered.pack(side="top", fill="x", padx=10, pady=10)
+    button_search_delivered = ttk.Button(frame_search_delivered, text="Search Delivered", command=search_delivered_shipment)
+    button_search_delivered.pack(side="left", padx=5)
 
-label_undelivered_shipment_id = ttk.Label(frame_search_undelivered, text="Enter Undelivered Shipment ID:")
-label_undelivered_shipment_id.pack(side="left")
+    frame_search_undelivered = ttk.Frame(root)
+    frame_search_undelivered.pack(side="top", fill="x", padx=10, pady=10)
 
-entry_undelivered_shipment_id = ttk.Entry(frame_search_undelivered)
-entry_undelivered_shipment_id.pack(side="left", padx=5)
+    label_undelivered_shipment_id = ttk.Label(frame_search_undelivered, text="Enter Undelivered Shipment ID:")
+    label_undelivered_shipment_id.pack(side="left")
 
-button_search_undelivered = ttk.Button(frame_search_undelivered, text="Search Undelivered", command=search_undelivered_shipment)
-button_search_undelivered.pack(side="left", padx=5)
+    entry_undelivered_shipment_id = ttk.Entry(frame_search_undelivered)
+    entry_undelivered_shipment_id.pack(side="left", padx=5)
 
-frame_undelivered = ttk.Frame(root)
-frame_undelivered.pack(side="top", fill="both", expand=True, padx=10, pady=10)
+    button_search_undelivered = ttk.Button(frame_search_undelivered, text="Search Undelivered", command=search_undelivered_shipment)
+    button_search_undelivered.pack(side="left", padx=5)
 
-button_show_undelivered = ttk.Button(frame_undelivered, text="Show Undelivered Shipments", command=show_undelivered_shipments)
-button_show_undelivered.pack(side="left", padx=5)
+    frame_undelivered = ttk.Frame(root)
+    frame_undelivered.pack(side="top", fill="both", expand=True, padx=10, pady=10)
 
-button_reset_selection = ttk.Button(frame_undelivered, text="Reset Selection", command=reset_selection)
-button_reset_selection.pack(side="left", padx=5)
+    button_show_undelivered = ttk.Button(frame_undelivered, text="Show Undelivered Shipments", command=show_undelivered_shipments)
+    button_show_undelivered.pack(side="left", padx=5)
 
-shipments_tree = ttk.Treeview(frame_undelivered, columns=("ID", "Date", "Status", "Time"), show="headings")
-shipments_tree.heading("ID", text="ID")
-shipments_tree.heading("Date", text="Date")
-shipments_tree.heading("Status", text="Status")
-shipments_tree.heading("Time", text="Time")
-shipments_tree.pack(expand=True, fill="both")
+    button_reset_selection = ttk.Button(frame_undelivered, text="Reset Selection", command=reset_selection)
+    button_reset_selection.pack(side="left", padx=5)
 
-# Customer List
-frame_customers = ttk.Frame(root)
-frame_customers.pack(side="left", fill="both", expand=True)
+    shipments_tree = ttk.Treeview(frame_undelivered, columns=("ID", "Date", "Status", "Time", "Customer ID", "Target City ID"), show="headings")
+    shipments_tree.heading("ID", text="ID")
+    shipments_tree.heading("Date", text="Date")
+    shipments_tree.heading("Status", text="Status")
+    shipments_tree.heading("Time", text="Time")
+    shipments_tree.heading("Customer ID", text="Customer ID")
+    shipments_tree.heading("Target City ID", text="Target City ID")
+    shipments_tree.pack(expand=True, fill="both")
 
-customers_tree = ttk.Treeview(frame_customers, columns=("ID", "Name"), show="headings")
-customers_tree.heading("ID", text="ID")
-customers_tree.heading("Name", text="Name")
-customers_tree.pack(expand=True, fill="both")
+    # Customer List
+    frame_customers = ttk.Frame(root)
+    frame_customers.pack(side="left", fill="both", expand=True)
 
-# Load Customers
-conn = sqlite3.connect('shipping.db')
-cursor = conn.cursor()
-cursor.execute("SELECT customer_id, name FROM customers")
-for customer in cursor.fetchall():
-    customers_tree.insert("", "end", values=customer)
+    customers_tree = ttk.Treeview(frame_customers, columns=("ID", "Name"), show="headings")
+    customers_tree.heading("ID", text="ID")
+    customers_tree.heading("Name", text="Name")
+    customers_tree.pack(expand=True, fill="both")
 
-customers_tree.bind("<Double-1>", show_customer_shipments)
+    # Load Customers
+    conn = sqlite3.connect('shipping.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT customer_id, name FROM customers")
+    for customer in cursor.fetchall():
+        customers_tree.insert("", "end", values=customer)
 
-root.mainloop()
-conn.close()
+    customers_tree.bind("<Double-1>", show_customer_shipments)
+
+    root.mainloop()
+    conn.close()
+
+if __name__ == "__main__":
+    main()

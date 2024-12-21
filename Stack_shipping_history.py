@@ -78,56 +78,42 @@ def show_customer_shipments(event):
     for shipment in shipments:
         shipments_tree.insert("", "end", values=shipment)
 
-# Tkinter UI
-root = tk.Tk()
-root.title("Shipping History")
+def main():
+    # Tkinter UI
+    root = tk.Tk()
+    root.title("Shipping History")
 
-# Customer List
-frame_customers = ttk.Frame(root)
-frame_customers.pack(side="left", fill="both", expand=True)
+    # Customer List
+    frame_customers = ttk.Frame(root)
+    frame_customers.pack(side="left", fill="both", expand=True)
 
-customers_tree = ttk.Treeview(frame_customers, columns=("ID", "Name"), show="headings")
-customers_tree.heading("ID", text="ID")
-customers_tree.heading("Name", text="Name")
-customers_tree.pack(expand=True, fill="both")
+    customers_tree = ttk.Treeview(frame_customers, columns=("ID", "Name"), show="headings")
+    customers_tree.heading("ID", text="ID")
+    customers_tree.heading("Name", text="Name")
+    customers_tree.pack(expand=True, fill="both")
 
-# Load Customers
-conn = sqlite3.connect('shipping.db')
-cursor = conn.cursor()
-cursor.execute("SELECT customer_id, name FROM customers")
-for customer in cursor.fetchall():
-    customers_tree.insert("", "end", values=customer)
+    # Load Customers
+    conn = sqlite3.connect('shipping.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT customer_id, name FROM customers")
+    for customer in cursor.fetchall():
+        customers_tree.insert("", "end", values=customer)
 
-# Shipping History
-frame_shipments = ttk.Frame(root)
-frame_shipments.pack(side="right", fill="both", expand=True)
+    # Shipping History
+    frame_shipments = ttk.Frame(root)
+    frame_shipments.pack(side="right", fill="both", expand=True)
 
-shipments_tree = ttk.Treeview(frame_shipments, columns=("ID", "Date", "Status", "Time"), show="headings")
-shipments_tree.heading("ID", text="ID")
-shipments_tree.heading("Date", text="Date")
-shipments_tree.heading("Status", text="Status")
-shipments_tree.heading("Time", text="Time")
-shipments_tree.pack(expand=True, fill="both")
+    shipments_tree = ttk.Treeview(frame_shipments, columns=("ID", "Date", "Status", "Time"), show="headings")
+    shipments_tree.heading("ID", text="ID")
+    shipments_tree.heading("Date", text="Date")
+    shipments_tree.heading("Status", text="Status")
+    shipments_tree.heading("Time", text="Time")
+    shipments_tree.pack(expand=True, fill="both")
 
-customers_tree.bind("<Double-1>", show_customer_shipments)
+    customers_tree.bind("<Double-1>", show_customer_shipments)
 
-root.mainloop()
-conn.close()
-class ShippingStack:
-    def __init__(self):
-        self.stack = []
-        self.max_size = 5
+    root.mainloop()
+    conn.close()
 
-    def push(self, shipping):
-        if len(self.stack) >= self.max_size:
-            self.stack.pop(0)
-        self.stack.append(shipping)
-
-    def get_last_shipments(self):
-        if not self.stack:
-            raise ValueError("No shipping history available.")
-        return self.stack
-
-    def add_shipment(self, shipping):
-        self.push(shipping)
-        return self.get_last_shipments()
+if __name__ == "__main__":
+    main()
