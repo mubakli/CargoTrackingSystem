@@ -35,7 +35,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 def create_shipping_history_table():
-    conn = sqlite3.connect('shipping.db')
+    conn = sqlite3.connect('../shipping.db')
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS shipping_history (
@@ -50,7 +50,7 @@ def create_shipping_history_table():
     conn.close()
 
 def fetch_shipping_history(customer_id):
-    conn = sqlite3.connect('shipping.db')
+    conn = sqlite3.connect('../shipping.db')
     cursor = conn.cursor()
     cursor.execute("""
         SELECT shipping_id, shipping_date, delivery_status, delivery_time, customer_id
@@ -58,6 +58,27 @@ def fetch_shipping_history(customer_id):
         WHERE customer_id = ?
         ORDER BY shipping_date DESC
     """, (customer_id,))
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
+
+def fetch_undelivered_shipments(customer_id=None):
+    conn = sqlite3.connect('../shipping.db')
+    cursor = conn.cursor()
+    if customer_id:
+        cursor.execute("""
+            SELECT shipping_id, shipping_date, delivery_status, delivery_time, customer_id
+            FROM shipping_history
+            WHERE customer_id = ? AND delivery_status != 'Delivered'
+            ORDER BY delivery_time
+        """, (customer_id,))
+    else:
+        cursor.execute("""
+            SELECT shipping_id, shipping_date, delivery_status, delivery_time, customer_id
+            FROM shipping_history
+            WHERE delivery_status != 'Delivered'
+            ORDER BY delivery_time
+        """)
     rows = cursor.fetchall()
     conn.close()
     return rows
@@ -104,14 +125,26 @@ def merge_sort(shipments):
             k += 1
     return shipments
 
+def quick_sort(shipments):
+    if len(shipments) <= 1:
+        return shipments
+    pivot = shipments[len(shipments) // 2]
+    left = [x for x in shipments if x[3] < pivot[3]]
+    middle = [x for x in shipments if x[3] == pivot[3]]
+    right = [x for x in shipments if x[3] > pivot[3]]
+    return quick_sort(left) + middle + quick_sort(right)
+
 def display_delivered_shipments(shipments):
     delivered_shipments = [s for s in shipments if s[2] == 'Delivered']
     delivered_shipments.sort(key=lambda x: x[0])  # Sort by shipping_id
     return delivered_shipments
 
-def display_undelivered_shipments(shipments):
+def display_undelivered_shipments(shipments, sort_algorithm):
     undelivered_shipments = [s for s in shipments if s[2] != 'Delivered']
-    sorted_shipments = merge_sort(undelivered_shipments)
+    if sort_algorithm == "Merge Sort":
+        sorted_shipments = merge_sort(undelivered_shipments)
+    elif sort_algorithm == "Quick Sort":
+        sorted_shipments = quick_sort(undelivered_shipments)
     return sorted_shipments
 
 def search_shipment():
@@ -123,8 +156,16 @@ def search_shipment():
         messagebox.showwarning("Not Found", "Shipment not found.")
 
 def show_undelivered_shipments():
+    selected_item = customers_tree.selection()
+    if selected_item:
+        customer_id = customers_tree.item(selected_item, "values")[0]
+    else:
+        customer_id = None
     shipments_tree.delete(*shipments_tree.get_children())
-    for shipment in undelivered_shipments:
+    shipments = fetch_undelivered_shipments(customer_id)
+    sort_algorithm = sort_var.get()
+    sorted_shipments = display_undelivered_shipments(shipments, sort_algorithm)
+    for shipment in sorted_shipments:
         shipments_tree.insert("", "end", values=shipment)
 
 def show_customer_shipments(event):
@@ -137,6 +178,10 @@ def show_customer_shipments(event):
     for shipment in shipments:
         shipments_tree.insert("", "end", values=shipment)
 
+def reset_selection():
+    customers_tree.selection_remove(customers_tree.selection())
+    show_undelivered_shipments()
+
 # Create the shipping_history table if it does not exist
 create_shipping_history_table()
 
@@ -144,7 +189,7 @@ create_shipping_history_table()
 customer_id = 1  # Example customer_id
 shipments = fetch_shipping_history(customer_id)
 delivered_shipments = display_delivered_shipments(shipments)
-undelivered_shipments = display_undelivered_shipments(shipments)
+undelivered_shipments = display_undelivered_shipments(shipments, "Merge Sort")
 
 # Tkinter UI
 root = tk.Tk()
@@ -165,8 +210,17 @@ button_search.pack(side="left", padx=5)
 frame_undelivered = ttk.Frame(root)
 frame_undelivered.pack(side="top", fill="both", expand=True, padx=10, pady=10)
 
+sort_var = tk.StringVar(value="Merge Sort")
+sort_label = ttk.Label(frame_undelivered, text="Sort by:")
+sort_label.pack(side="left", padx=5)
+sort_menu = ttk.OptionMenu(frame_undelivered, sort_var, "Merge Sort", "Merge Sort", "Quick Sort")
+sort_menu.pack(side="left", padx=5)
+
 button_show_undelivered = ttk.Button(frame_undelivered, text="Show Undelivered Shipments", command=show_undelivered_shipments)
-button_show_undelivered.pack(side="top", pady=5)
+button_show_undelivered.pack(side="left", padx=5)
+
+button_reset_selection = ttk.Button(frame_undelivered, text="Reset Selection", command=reset_selection)
+button_reset_selection.pack(side="left", padx=5)
 
 shipments_tree = ttk.Treeview(frame_undelivered, columns=("ID", "Date", "Status", "Time"), show="headings")
 shipments_tree.heading("ID", text="ID")
@@ -185,7 +239,7 @@ customers_tree.heading("Name", text="Name")
 customers_tree.pack(expand=True, fill="both")
 
 # Load Customers
-conn = sqlite3.connect('shipping.db')
+conn = sqlite3.connect('../shipping.db')
 cursor = conn.cursor()
 cursor.execute("SELECT customer_id, name FROM customers")
 for customer in cursor.fetchall():

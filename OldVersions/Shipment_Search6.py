@@ -35,7 +35,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 def create_shipping_history_table():
-    conn = sqlite3.connect('shipping.db')
+    conn = sqlite3.connect('../shipping.db')
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS shipping_history (
@@ -50,7 +50,7 @@ def create_shipping_history_table():
     conn.close()
 
 def fetch_shipping_history(customer_id):
-    conn = sqlite3.connect('shipping.db')
+    conn = sqlite3.connect('../shipping.db')
     cursor = conn.cursor()
     cursor.execute("""
         SELECT shipping_id, shipping_date, delivery_status, delivery_time, customer_id
@@ -63,7 +63,7 @@ def fetch_shipping_history(customer_id):
     return rows
 
 def fetch_undelivered_shipments(customer_id=None):
-    conn = sqlite3.connect('shipping.db')
+    conn = sqlite3.connect('../shipping.db')
     cursor = conn.cursor()
     if customer_id:
         cursor.execute("""
@@ -253,7 +253,7 @@ customers_tree.heading("Name", text="Name")
 customers_tree.pack(expand=True, fill="both")
 
 # Load Customers
-conn = sqlite3.connect('shipping.db')
+conn = sqlite3.connect('../shipping.db')
 cursor = conn.cursor()
 cursor.execute("SELECT customer_id, name FROM customers")
 for customer in cursor.fetchall():
