@@ -2,6 +2,7 @@ import sqlite3
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import datetime
+from Stack_shipping_history import shipping_stack
 
 class Node:
     def __init__(self, data):
@@ -31,48 +32,67 @@ class LinkedList:
         return data_list
 
 def create_shipping_history_table():
-    conn = sqlite3.connect('shipping.db')
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS shipping_history (
-            shipping_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            shipping_date TEXT,
-            delivery_status TEXT,
-            delivery_time INTEGER,
-            customer_id INTEGER,
-            target_city_id INTEGER,
-            FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
-        )
-    """)
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect('shipping.db')
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS shipping_history (
+                shipping_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                shipping_date TEXT,
+                delivery_status TEXT,
+                delivery_time INTEGER,
+                customer_id INTEGER,
+                target_city_id INTEGER,
+                FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
+            )
+        """)
+        conn.commit()
+    except sqlite3.Error as e:
+        messagebox.showerror("Database Error", f"An error occurred: {e}")
+    finally:
+        conn.close()
 
 def fetch_customers():
-    conn = sqlite3.connect('shipping.db')
-    cursor = conn.cursor()
-    cursor.execute("SELECT customer_id, name FROM customers")
-    rows = cursor.fetchall()
-    conn.close()
-    return rows
+    try:
+        conn = sqlite3.connect('shipping.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT customer_id, name FROM customers")
+        rows = cursor.fetchall()
+        return rows
+    except sqlite3.Error as e:
+        messagebox.showerror("Database Error", f"An error occurred: {e}")
+        return []
+    finally:
+        conn.close()
 
 def add_cargo(shipping_date, delivery_status, delivery_time, customer_id, target_city_id):
-    conn = sqlite3.connect('shipping.db')
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO shipping_history (shipping_date, delivery_status, delivery_time, customer_id, target_city_id)
-        VALUES (?, ?, ?, ?, ?)
-    """, (shipping_date, delivery_status, delivery_time, customer_id, target_city_id))
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect('shipping.db')
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO shipping_history (shipping_date, delivery_status, delivery_time, customer_id, target_city_id)
+            VALUES (?, ?, ?, ?, ?)
+        """, (shipping_date, delivery_status, delivery_time, customer_id, target_city_id))
+        conn.commit()
+        new_shipment = cursor.execute("SELECT * FROM shipping_history WHERE shipping_id = last_insert_rowid()").fetchone()
+        shipping_stack.push(new_shipment)
+    except sqlite3.Error as e:
+        messagebox.showerror("Database Error", f"An error occurred: {e}")
+    finally:
+        conn.close()
 
 def delete_cargo(shipping_id):
-    conn = sqlite3.connect('shipping.db')
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM shipping_history WHERE shipping_id = ?", (shipping_id,))
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect('shipping.db')
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM shipping_history WHERE shipping_id = ?", (shipping_id,))
+        conn.commit()
+    except sqlite3.Error as e:
+        messagebox.showerror("Database Error", f"An error occurred: {e}")
+    finally:
+        conn.close()
 
-def center_window(window, width=400, height=300):
+def center_window(window, width=600, height=400):
     screen_width = window.winfo_screenwidth()
     screen_height = window.winfo_screenheight()
     x = (screen_width // 2) - (width // 2)
@@ -96,7 +116,7 @@ def add_cargo_ui():
     window = tk.Tk()
     window.title("Add Cargo")
     window.configure(bg='white')
-    center_window(window, width=500, height=400)
+    center_window(window, width=600, height=400)
 
     ttk.Label(window, text="Date:", background='white').grid(row=0, column=0, padx=10, pady=10)
     entry_date = ttk.Entry(window)
@@ -137,7 +157,7 @@ def delete_cargo_ui():
     window = tk.Tk()
     window.title("Delete Cargo")
     window.configure(bg='white')
-    center_window(window, width=500, height=400)
+    center_window(window, width=600, height=400)
 
     ttk.Label(window, text="Shipping ID:", background='white').grid(row=0, column=0, padx=10, pady=10)
     entry_id = ttk.Entry(window)
@@ -153,6 +173,7 @@ def main():
     root = tk.Tk()
     root.title("Cargo Management")
     root.configure(bg='white')
+    center_window(root, width=600, height=400)
 
     ttk.Button(root, text="Add Cargo", command=add_cargo_ui).pack(padx=10, pady=10)
     ttk.Button(root, text="Delete Cargo", command=delete_cargo_ui).pack(padx=10, pady=10)

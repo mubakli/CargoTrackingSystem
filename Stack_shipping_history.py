@@ -1,22 +1,3 @@
-"""
-Her müşteri için son gönderilen kargoları hızlıca sorgulamak için bir yığın (stack)
-kullanılmalıdır.
-İşlevler:
- Son gönderilen 5 kargoyu sorgulama.
- Yeni gönderim eklenmesi durumunda stack’e push işlemi yapılmalıdır.
- Eğer gönderim geçmişi boşsa, uygun bir hata mesajı döndürülmelidir.
-Veriler shipping.db adlı SQLite veritabanında saklanıyor. Veriler buradan çekilmeli.
-Saklandığı tablo adı shipping_history. Tablo şeması:
-shipping_id INTEGER PRIMARY KEY
-shipping_date TEXT
-delivery_status TEXT
-delivery_time INTEGER
-customer_id INTEGER
-Konsola aşağıdaki gibi bir çıktı verilmelidir:
-Shipping ID: 101, Date: 2024-12-10, Status: Delivered, Time: 2
-Shipping ID: 102, Date: 2024-12-11, Status: In Transit, Time: 3
-"""
-
 import sqlite3
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -35,6 +16,8 @@ class ShippingStack:
         if not self.stack:
             raise ValueError("No shipping history available.")
         return self.stack
+
+shipping_stack = ShippingStack()
 
 def fetch_shipping_history(customer_id):
     conn = sqlite3.connect('shipping.db')
@@ -59,8 +42,10 @@ def categorize_shipments(shipments):
 def display_shipping_history(customer_id):
     try:
         shipments = fetch_shipping_history(customer_id)
+        if not shipments:
+            print("This person has no posts.")
+            return
         categorized_shipments = categorize_shipments(shipments)
-
         for status, shipment_list in categorized_shipments.items():
             print(f"\n{status} Shipments:")
             for shipment in shipment_list:
@@ -75,8 +60,11 @@ def show_customer_shipments(event):
     customer_id = customers_tree.item(selected_item, "values")[0]
     shipments_tree.delete(*shipments_tree.get_children())
     shipments = fetch_shipping_history(customer_id)
-    for shipment in shipments:
-        shipments_tree.insert("", "end", values=shipment)
+    if not shipments:
+        messagebox.showinfo("No Shipments", "This person has no posts.")
+    else:
+        for shipment in shipments:
+            shipments_tree.insert("", "end", values=shipment)
 
 def main():
     global customers_tree, shipments_tree

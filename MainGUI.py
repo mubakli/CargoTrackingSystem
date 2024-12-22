@@ -1,11 +1,11 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import sqlite3
-from Shipment_Management import add_cargo_ui
+from Shipment_Management import main as shipment_management_main
 from Customer_Management import main as customer_management_main
 
-def add_cargo_shipment():
-    add_cargo_ui()
+def open_shipment_management():
+    shipment_management_main()
 
 def check_shipping_status():
     import Shipment_Search
@@ -39,9 +39,9 @@ root = tk.Tk()
 root.title("Main GUI")
 center_window(root, width=600, height=400)
 
-ttk.Button(root, text="Add Cargo Shipment", command=add_cargo_shipment).pack(padx=10, pady=10)
+ttk.Button(root, text="Cargo Management", command=open_shipment_management).pack(padx=10, pady=10)
 ttk.Button(root, text="Check Shipping Status", command=check_shipping_status).pack(padx=10, pady=10)
-ttk.Button(root, text="View Shipping History", command=view_shipping_history).pack(padx=10, pady=10)
+ttk.Button(root, text="View Shipping History(Stack)", command=view_shipping_history).pack(padx=10, pady=10)
 ttk.Button(root, text="List All Shipments", command=list_all_shipments).pack(padx=10, pady=10)
 ttk.Button(root, text="Show Delivery Routes", command=show_delivery_routes).pack(padx=10, pady=10)
 ttk.Button(root, text="Customer Management", command=open_customer_management).pack(padx=10, pady=10)
