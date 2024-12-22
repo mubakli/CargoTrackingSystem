@@ -16,14 +16,11 @@ def view_shipping_history():
     Stack_shipping_history.main()
 
 def list_all_shipments():
-    new_window = tk.Tk()
-    new_window.title("List All Shipments")
-    messagebox.showinfo("List All Shipments", "This will open the List All Shipments UI.", parent=new_window)
-    new_window.mainloop()
+    import Show_all_shipments
+    Show_all_shipments.show_all_shipments()  # Updated function call
 
 def show_delivery_routes():
-    import tree4
-    tree4.main()
+    messagebox.showinfo("Info", "This feature is not yet implemented.")
 
 def open_customer_management():
     customer_management_main()
