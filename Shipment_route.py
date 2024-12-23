@@ -180,6 +180,7 @@ def show_routes(event):
 
     visualize_tree(tree_root, target_city_name)
 
+
 def open_visualization_window():
     window = tk.Toplevel()
     window.title("Cargo Routes Visualization")
@@ -217,6 +218,60 @@ def open_visualization_window():
 
     canvas.draw()
 
+    # Add magnification tools
+    def zoom(event):
+        base_scale = 1.1
+        scale = base_scale if event.delta > 0 else 1 / base_scale
+        cur_xlim = ax.get_xlim()
+        cur_ylim = ax.get_ylim()
+        xdata = event.xdata
+        ydata = event.ydata
+        new_width = (cur_xlim[1] - cur_xlim[0]) * scale
+        new_height = (cur_ylim[1] - cur_ylim[0]) * scale
+        relx = (cur_xlim[1] - xdata) / (cur_xlim[1] - cur_xlim[0])
+        rely = (cur_ylim[1] - ydata) / (cur_ylim[1] - cur_ylim[0])
+        ax.set_xlim([xdata - new_width * (1 - relx), xdata + new_width * relx])
+        ax.set_ylim([ydata - new_height * (1 - rely), ydata + new_height * rely])
+        canvas.draw()
+
+    def pan(event):
+        if event.button == 1 and pan.start:
+            dx = event.xdata - pan.start[0]
+            dy = event.ydata - pan.start[1]
+            cur_xlim = ax.get_xlim()
+            cur_ylim = ax.get_ylim()
+            ax.set_xlim([cur_xlim[0] - dx, cur_xlim[1] - dx])
+            ax.set_ylim([cur_ylim[0] - dy, cur_ylim[1] - dy])
+            canvas.draw()
+
+    def on_press(event):
+        pan.start = (event.xdata, event.ydata)
+
+    def on_release(event):
+        pan.start = None
+
+    def zoom_in():
+        zoom_event = type('test', (object,), {'delta': 1, 'xdata': (ax.get_xlim()[1] + ax.get_xlim()[0]) / 2, 'ydata': (ax.get_ylim()[1] + ax.get_ylim()[0]) / 2})()
+        zoom(zoom_event)
+
+    def zoom_out():
+        zoom_event = type('test', (object,), {'delta': -1, 'xdata': (ax.get_xlim()[1] + ax.get_xlim()[0]) / 2, 'ydata': (ax.get_ylim()[1] + ax.get_ylim()[0]) / 2})()
+        zoom(zoom_event)
+
+    fig.canvas.mpl_connect('scroll_event', zoom)
+    fig.canvas.mpl_connect('button_press_event', on_press)
+    fig.canvas.mpl_connect('button_release_event', on_release)
+    fig.canvas.mpl_connect('motion_notify_event', pan)
+
+    pan.start = None
+
+    zoom_in_button = ttk.Button(window, text="Zoom In", command=zoom_in)
+    zoom_in_button.pack(side=tk.LEFT, padx=10, pady=10)
+
+    zoom_out_button = ttk.Button(window, text="Zoom Out", command=zoom_out)
+    zoom_out_button.pack(side=tk.LEFT, padx=10, pady=10)
+
+    window.mainloop()
 def main():
     global shipments_tree, tree_root
 

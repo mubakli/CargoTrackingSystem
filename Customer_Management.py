@@ -2,6 +2,12 @@ import sqlite3
 import tkinter as tk
 from tkinter import ttk, messagebox
 
+
+def print_linked_list(linked_list):
+    current = linked_list.head
+    while current:
+        print(current.data)
+        current = current.next
 class Node:
     def __init__(self, data):
         self.data = data
@@ -177,6 +183,8 @@ def main():
     style.configure("TButton", background='white', foreground='black')
 
     root.mainloop()
+    linked_list = LinkedList()
+    print_linked_list(linked_list)
 
 if __name__ == "__main__":
     create_customers_table()
