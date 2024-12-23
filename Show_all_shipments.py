@@ -49,6 +49,7 @@ def fetch_all_shipments():
 def show_all_shipments():
     shipments = fetch_all_shipments()
     linked_list = LinkedList()
+
     for shipment in shipments:
         linked_list.append(shipment)
 
@@ -76,6 +77,7 @@ def show_all_shipments():
 
     tree.pack(expand=True, fill="both")
 
+    # Insert shipments
     for shipment in linked_list.get_all_data():
         tree.insert("", "end", values=shipment)
 

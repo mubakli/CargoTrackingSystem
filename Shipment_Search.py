@@ -31,6 +31,7 @@ Ayrıca bir arayüz ile kullanıcıya kargo sorgulama imkanı sunulmalıdır.
 import sqlite3
 import tkinter as tk
 from tkinter import ttk, messagebox
+from datetime import datetime
 
 def create_shipping_history_table():
     conn = sqlite3.connect('shipping.db')
@@ -126,9 +127,9 @@ def search_undelivered_shipment():
     sorted_shipments = display_undelivered_shipments(undelivered_shipments)
     result = binary_search(sorted_shipments, shipment_id)
     if result:
-        messagebox.showinfo("Shipment Found", f"ID: {result[0]}, Date: {result[1]}, Status: {result[2]}, Time: {result[3]}, Customer ID: {result[4]}, Target City ID: {result[5]}")
+         messagebox.showinfo("Shipment Found", f"ID: {result[0]}, Date: {result[1]}, Status: {result[2]}, Time: {result[3]}, Customer ID: {result[4]}, Target City ID: {result[5]}")
     else:
-        messagebox.showwarning("Not Found", "Shipment not found.")
+         messagebox.showwarning("Not Found", "Shipment not found.")
 
 def show_undelivered_shipments():
     selected_item = customers_tree.selection()
@@ -140,7 +141,8 @@ def show_undelivered_shipments():
     shipments = fetch_undelivered_shipments(customer_id)
     global undelivered_shipments
     undelivered_shipments = display_undelivered_shipments(shipments)
-    for shipment in undelivered_shipments:
+    sorted_shipments = sorted(undelivered_shipments, key=lambda x: datetime.strptime(x[1], "%Y-%m-%d"), reverse=True)  # Sort by delivery date in descending order
+    for shipment in sorted_shipments:
         shipments_tree.insert("", "end", values=shipment)
 
 def show_customer_shipments(event):
@@ -158,7 +160,11 @@ def show_customer_shipments(event):
 
 def reset_selection():
     customers_tree.selection_remove(customers_tree.selection())
-    show_undelivered_shipments()
+    shipments_tree.delete(*shipments_tree.get_children())
+    shipments = fetch_undelivered_shipments()
+    sorted_shipments = sorted(shipments, key=lambda x: datetime.strptime(x[1], "%Y-%m-%d"), reverse=True)  # Sort by delivery date in descending order
+    for shipment in sorted_shipments:
+        shipments_tree.insert("", "end", values=shipment)
 
 def main():
     global entry_delivered_shipment_id, entry_undelivered_shipment_id, customers_tree, shipments_tree
@@ -192,14 +198,14 @@ def main():
     frame_search_undelivered = ttk.Frame(root)
     frame_search_undelivered.pack(side="top", fill="x", padx=10, pady=10)
 
-    label_undelivered_shipment_id = ttk.Label(frame_search_undelivered, text="Enter Undelivered Shipment ID:")
-    label_undelivered_shipment_id.pack(side="left")
+    # label_undelivered_shipment_id = ttk.Label(frame_search_undelivered, text="Enter Undelivered Shipment ID:")
+    # label_undelivered_shipment_id.pack(side="left")
 
-    entry_undelivered_shipment_id = ttk.Entry(frame_search_undelivered)
-    entry_undelivered_shipment_id.pack(side="left", padx=5)
+    # entry_undelivered_shipment_id = ttk.Entry(frame_search_undelivered)
+    # entry_undelivered_shipment_id.pack(side="left", padx=5)
 
-    button_search_undelivered = ttk.Button(frame_search_undelivered, text="Search Undelivered", command=search_undelivered_shipment)
-    button_search_undelivered.pack(side="left", padx=5)
+    # button_search_undelivered = ttk.Button(frame_search_undelivered, text="Search Undelivered", command=search_undelivered_shipment)
+    # button_search_undelivered.pack(side="left", padx=5)
 
     frame_undelivered = ttk.Frame(root)
     frame_undelivered.pack(side="top", fill="both", expand=True, padx=10, pady=10)
