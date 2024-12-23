@@ -2,12 +2,12 @@ import sqlite3
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-
 def print_linked_list(linked_list):
     current = linked_list.head
     while current:
         print(current.data)
         current = current.next
+
 class Node:
     def __init__(self, data):
         self.data = data
@@ -53,41 +53,58 @@ class LinkedList:
         temp = None
 
 def create_customers_table():
-    conn = sqlite3.connect('shipping.db')
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS customers (
-            customer_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL
-        )
-    """)
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect('shipping.db')
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS customers (
+                customer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL
+            )
+        """)
+        conn.commit()
+    except sqlite3.Error as e:
+        messagebox.showerror("Database Error", f"An error occurred: {e}")
+    finally:
+        conn.close()
 
 def add_customer(name, linked_list):
-    conn = sqlite3.connect('shipping.db')
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO customers (name) VALUES (?)", (name,))
-    conn.commit()
-    cursor.execute("SELECT last_insert_rowid()")
-    customer_id = cursor.fetchone()[0]
-    conn.close()
-    linked_list.append((customer_id, name))
+    try:
+        conn = sqlite3.connect('shipping.db')
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO customers (name) VALUES (?)", (name,))
+        conn.commit()
+        cursor.execute("SELECT last_insert_rowid()")
+        customer_id = cursor.fetchone()[0]
+        linked_list.append((customer_id, name))
+    except sqlite3.Error as e:
+        messagebox.showerror("Database Error", f"An error occurred: {e}")
+    finally:
+        conn.close()
 
 def delete_customer(customer_id):
-    conn = sqlite3.connect('shipping.db')
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM customers WHERE customer_id = ?", (customer_id,))
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect('shipping.db')
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM customers WHERE customer_id = ?", (customer_id,))
+        conn.commit()
+    except sqlite3.Error as e:
+        messagebox.showerror("Database Error", f"An error occurred: {e}")
+    finally:
+        conn.close()
 
 def fetch_customers():
-    conn = sqlite3.connect('shipping.db')
-    cursor = conn.cursor()
-    cursor.execute("SELECT customer_id, name FROM customers")
-    rows = cursor.fetchall()
-    conn.close()
-    return rows
+    try:
+        conn = sqlite3.connect('shipping.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT customer_id, name FROM customers")
+        rows = cursor.fetchall()
+        return rows
+    except sqlite3.Error as e:
+        messagebox.showerror("Database Error", f"An error occurred: {e}")
+        return []
+    finally:
+        conn.close()
 
 def center_window(window, width=400, height=300):
     screen_width = window.winfo_screenwidth()
@@ -95,11 +112,6 @@ def center_window(window, width=400, height=300):
     x = (screen_width // 2) - (width // 2)
     y = (screen_height // 2) - (height // 2)
     window.geometry(f'{width}x{height}+{x}+{y}')
-
-def print_linked_list(linked_list):
-    data = linked_list.get_all_data()
-    for item in data:
-        print(f"Customer ID: {item[0]}, Name: {item[1]}")
 
 def add_customer_ui(linked_list):
     def submit():
@@ -159,33 +171,44 @@ def delete_customer_ui(linked_list):
 
     window.mainloop()
 
+def on_closing():
+    try:
+        root.destroy()
+        import MainGUI
+        MainGUI.main()
+    except Exception as e:
+        messagebox.showerror("Error", f"An error occurred while closing the application: {e}")
+
 def main():
-    # Main GUI
-    root = tk.Tk()
-    root.title("Customer Management")
-    root.configure(bg='white')
-    center_window(root, width=600, height=400)
+    try:
+        create_customers_table()
 
-    linked_list = LinkedList()
-    for customer in fetch_customers():
-        linked_list.append(customer)
+        global root
+        root = tk.Tk()
+        root.title("Customer Management")
+        root.configure(bg='white')
+        center_window(root, width=600, height=400)
 
-    button_add_customer = ttk.Button(root, text="Add Customer", command=lambda: add_customer_ui(linked_list), style="TButton")
-    button_add_customer.pack(padx=10, pady=10)
+        linked_list = LinkedList()
+        for customer in fetch_customers():
+            linked_list.append(customer)
 
-    button_delete_customer = ttk.Button(root, text="Delete Customer", command=lambda: delete_customer_ui(linked_list), style="TButton")
-    button_delete_customer.pack(padx=10, pady=10)
+        button_add_customer = ttk.Button(root, text="Add Customer", command=lambda: add_customer_ui(linked_list), style="TButton")
+        button_add_customer.pack(padx=10, pady=10)
 
-    button_print_linked_list = ttk.Button(root, text="Print Linked List", command=lambda: print_linked_list(linked_list), style="TButton")
-    button_print_linked_list.pack(padx=10, pady=10)
+        button_delete_customer = ttk.Button(root, text="Delete Customer", command=lambda: delete_customer_ui(linked_list), style="TButton")
+        button_delete_customer.pack(padx=10, pady=10)
 
-    style = ttk.Style()
-    style.configure("TButton", background='white', foreground='black')
+        button_print_linked_list = ttk.Button(root, text="Print Linked List", command=lambda: print_linked_list(linked_list), style="TButton")
+        button_print_linked_list.pack(padx=10, pady=10)
 
-    root.mainloop()
-    linked_list = LinkedList()
-    print_linked_list(linked_list)
+        style = ttk.Style()
+        style.configure("TButton", background='white', foreground='black')
+
+        root.protocol("WM_DELETE_WINDOW", on_closing)
+        root.mainloop()
+    except Exception as e:
+        messagebox.showerror("Error", f"An error occurred in the main function: {e}")
 
 if __name__ == "__main__":
-    create_customers_table()
     main()

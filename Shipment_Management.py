@@ -42,8 +42,7 @@ def create_shipping_history_table():
                 delivery_status TEXT,
                 delivery_time INTEGER,
                 customer_id INTEGER,
-                target_city_id INTEGER,
-                FOREIGN KEY (customer_id) REFERENCES customers (customer_id)
+                target_city_id INTEGER
             )
         """)
         conn.commit()
@@ -110,10 +109,12 @@ def add_cargo_ui():
             add_cargo(shipping_date, delivery_status, delivery_time, customer_id, target_city_id)
             messagebox.showinfo("Success", "Cargo added successfully!")
             window.destroy()
+            root.deiconify()
         else:
             messagebox.showwarning("Input Error", "Please fill all fields.")
 
-    window = tk.Tk()
+    root.withdraw()
+    window = tk.Toplevel()
     window.title("Add Cargo")
     window.configure(bg='white')
     center_window(window, width=600, height=400)
@@ -142,6 +143,7 @@ def add_cargo_ui():
 
     ttk.Button(window, text="Submit", command=submit).grid(row=4, column=0, columnspan=2, pady=10)
 
+    window.protocol("WM_DELETE_WINDOW", lambda: (window.destroy(), root.deiconify()))
     window.mainloop()
 
 def delete_cargo_ui():
@@ -151,10 +153,12 @@ def delete_cargo_ui():
             delete_cargo(shipping_id)
             messagebox.showinfo("Success", "Cargo deleted successfully!")
             window.destroy()
+            root.deiconify()
         else:
             messagebox.showwarning("Input Error", "Please enter a valid Shipping ID.")
 
-    window = tk.Tk()
+    root.withdraw()
+    window = tk.Toplevel()
     window.title("Delete Cargo")
     window.configure(bg='white')
     center_window(window, width=600, height=400)
@@ -165,11 +169,18 @@ def delete_cargo_ui():
 
     ttk.Button(window, text="Submit", command=submit).grid(row=1, column=0, columnspan=2, pady=10)
 
+    window.protocol("WM_DELETE_WINDOW", lambda: (window.destroy(), root.deiconify()))
     window.mainloop()
+
+def on_closing():
+    root.destroy()
+    import MainGUI
+    MainGUI.main()
 
 def main():
     create_shipping_history_table()
 
+    global root
     root = tk.Tk()
     root.title("Cargo Management")
     root.configure(bg='white')
@@ -178,6 +189,7 @@ def main():
     ttk.Button(root, text="Add Cargo", command=add_cargo_ui).pack(padx=10, pady=10)
     ttk.Button(root, text="Delete Cargo", command=delete_cargo_ui).pack(padx=10, pady=10)
 
+    root.protocol("WM_DELETE_WINDOW", on_closing)
     root.mainloop()
 
 if __name__ == "__main__":

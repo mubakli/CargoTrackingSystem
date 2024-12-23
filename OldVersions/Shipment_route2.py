@@ -247,7 +247,6 @@ def open_visualization_window():
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred while opening the visualization window: {e}")
 
-
 def main():
     try:
         global shipments_tree, tree_root
@@ -257,16 +256,6 @@ def main():
         root = tk.Tk()
         root.title("Cargo Routes")
         root.geometry("1440x720")
-
-        def on_closing():
-            root.destroy()
-            try:
-                import MainGUI
-                MainGUI.main()
-            except Exception as e:
-                messagebox.showerror("Error", f"An error occurred while switching to MainGUI: {e}")
-
-        root.protocol("WM_DELETE_WINDOW", on_closing)
 
         frame_left = ttk.Frame(root)
         frame_left.pack(side="left", fill="both", expand=True, padx=10, pady=10)

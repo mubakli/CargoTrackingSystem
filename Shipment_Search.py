@@ -1,33 +1,3 @@
-"""
-Kargo Durum Sorgulama (Sorting & Searching)
-Sistem, kargo durumlarını sorgulamak için sıralama ve arama algoritmalarını
-kullanmalıdır.
- Teslim Edilmiş Kargolar:
-o Kargo ID’ye göre binary search algoritması kullanılarak bulunmalıdır.
-o Arama işlemi sırasında sorted list kullanılmalıdır.
- Teslim Edilmemiş Kargolar:
-o Teslimat süresine göre merge sort veya quick sort kullanılarak
-sıralanmalıdır.
-o Sıralama işleminin zaman karmaşıklığı analiz edilmelidir.
-
-Gönderiler shipping.db adlı SQLite veritabanında saklanıyor. Veriler buradan çekilmeli.
-Saklandığı tablo adı shipments. Tablo şeması:
-shipmentID INTEGER PRIMARY KEY
-shipmentYear TEXT
-shipmentMonth TEXT
-shipmentDay TEXT
-shipmentType TEXT
-shipmentStatus TEXT
-Konsola aşağıdaki gibi bir çıktı verilmelidir:
-Delivered Shipments:
-ID: 101, Date: 2024-12-10, Status: Delivered, Time: 2
-Ayrıca zaman karmaşıklığı da analiz edilmeli.
-Aynı zamanda teslim edilmemiş kargoların sıralanması için kullanılan algoritma
-belirtilmelidir.
-Ayrıca sıralama işlemi sırasında kullanılan veri yapısı da belirtilmelidir.
-Ayrıca bir arayüz ile kullanıcıya kargo sorgulama imkanı sunulmalıdır.
-"""
-
 import sqlite3
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -166,8 +136,14 @@ def reset_selection():
     for shipment in sorted_shipments:
         shipments_tree.insert("", "end", values=shipment)
 
+def on_closing():
+    global root
+    root.destroy()
+    import MainGUI
+    MainGUI.main()
+
 def main():
-    global entry_delivered_shipment_id, entry_undelivered_shipment_id, customers_tree, shipments_tree
+    global entry_delivered_shipment_id, entry_undelivered_shipment_id, customers_tree, shipments_tree, root
 
     # Create the shipping_history table if it does not exist
     create_shipping_history_table()
@@ -243,6 +219,7 @@ def main():
 
     customers_tree.bind("<Double-1>", show_customer_shipments)
 
+    root.protocol("WM_DELETE_WINDOW", on_closing)
     root.mainloop()
     conn.close()
 
