@@ -2,7 +2,7 @@ import unittest
 import sqlite3
 from io import StringIO
 import sys
-from CustomerDataManagment import Customer  # Import the Customer class from your main code
+from OldVersions.CustomerDataManagment import Customer  # Import the Customer class from your main code
 
 
 class TestCustomer(unittest.TestCase):

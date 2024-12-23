@@ -58,12 +58,15 @@ def create_customers_table():
     conn.commit()
     conn.close()
 
-def add_customer(name):
+def add_customer(name, linked_list):
     conn = sqlite3.connect('shipping.db')
     cursor = conn.cursor()
     cursor.execute("INSERT INTO customers (name) VALUES (?)", (name,))
     conn.commit()
+    cursor.execute("SELECT last_insert_rowid()")
+    customer_id = cursor.fetchone()[0]
     conn.close()
+    linked_list.append((customer_id, name))
 
 def delete_customer(customer_id):
     conn = sqlite3.connect('shipping.db')
@@ -87,11 +90,16 @@ def center_window(window, width=400, height=300):
     y = (screen_height // 2) - (height // 2)
     window.geometry(f'{width}x{height}+{x}+{y}')
 
-def add_customer_ui():
+def print_linked_list(linked_list):
+    data = linked_list.get_all_data()
+    for item in data:
+        print(f"Customer ID: {item[0]}, Name: {item[1]}")
+
+def add_customer_ui(linked_list):
     def submit():
         name = entry_name.get()
         if name:
-            add_customer(name)
+            add_customer(name, linked_list)
             messagebox.showinfo("Success", "Customer added successfully!")
             window.destroy()
         else:
@@ -115,7 +123,7 @@ def add_customer_ui():
 
     window.mainloop()
 
-def delete_customer_ui():
+def delete_customer_ui(linked_list):
     def submit():
         selected_item = customer_listbox.curselection()
         if selected_item:
@@ -131,10 +139,6 @@ def delete_customer_ui():
     window.title("Delete Customer")
     window.configure(bg='white')
     center_window(window)
-
-    linked_list = LinkedList()
-    for customer in fetch_customers():
-        linked_list.append(customer)
 
     customer_listbox = tk.Listbox(window)
     for customer in linked_list.get_all_data():
@@ -156,11 +160,18 @@ def main():
     root.configure(bg='white')
     center_window(root, width=600, height=400)
 
-    button_add_customer = ttk.Button(root, text="Add Customer", command=add_customer_ui, style="TButton")
+    linked_list = LinkedList()
+    for customer in fetch_customers():
+        linked_list.append(customer)
+
+    button_add_customer = ttk.Button(root, text="Add Customer", command=lambda: add_customer_ui(linked_list), style="TButton")
     button_add_customer.pack(padx=10, pady=10)
 
-    button_delete_customer = ttk.Button(root, text="Delete Customer", command=delete_customer_ui, style="TButton")
+    button_delete_customer = ttk.Button(root, text="Delete Customer", command=lambda: delete_customer_ui(linked_list), style="TButton")
     button_delete_customer.pack(padx=10, pady=10)
+
+    button_print_linked_list = ttk.Button(root, text="Print Linked List", command=lambda: print_linked_list(linked_list), style="TButton")
+    button_print_linked_list.pack(padx=10, pady=10)
 
     style = ttk.Style()
     style.configure("TButton", background='white', foreground='black')
