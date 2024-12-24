@@ -250,13 +250,18 @@ def open_visualization_window():
 
 def main():
     try:
-        global shipments_tree, tree_root
+        global shipments_tree, tree_root, warning_shown
 
         tree_root = build_tree()
+        warning_shown = False
 
         root = tk.Tk()
         root.title("Cargo Routes")
         root.geometry("1440x720")
+
+        if not warning_shown:
+            messagebox.showinfo("Information", "Double-clicking a shipment will show the details of the route.")
+            warning_shown = True
 
         def on_closing():
             root.destroy()
