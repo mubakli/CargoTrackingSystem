@@ -94,7 +94,7 @@ def main():
         ttk.Button(root, text="List All Shipments", command=list_all_shipments).pack(pady=10)
         ttk.Button(root, text="Show Delivery Routes", command=show_delivery_routes).pack(pady=10)
         ttk.Button(root, text="Customer Management", command=open_customer_management).pack(pady=10)
-        ttk.Button(root, text="Sorted Shipments by Delivery Time", command=show_sorted_shipments).pack(pady=10)
+        ttk.Button(root, text="Sorted Shipments by Delivery Time(Priority Queue)", command=show_sorted_shipments).pack(pady=10)
 
         root.protocol("WM_DELETE_WINDOW", on_closing)
 
