@@ -4,6 +4,25 @@ import sqlite3
 from Shipment_Management import main as shipment_management_main
 from Customer_Management import main as customer_management_main
 from Shipment_priority import display_sorted_shipments
+import subprocess
+import sys
+
+
+def install_and_import(package):
+    try:
+        __import__(package)
+    except ImportError:
+        print(f"{package} modülü eksik. Yükleniyor...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+        print(f"{package} başarıyla yüklendi!")
+
+
+# Gerekli bağımlılıkların listesi. Bunlar yüklü değilse program sağlık olarak çalışmaz. Lütfen yükleyin.
+required_packages = ["sqlite3", "tkinter", "matplotlib", "networkx"]
+
+for package in required_packages:
+    install_and_import(package)
+
 
 def open_shipment_management():
     try:
@@ -12,6 +31,7 @@ def open_shipment_management():
         root.deiconify()
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred while opening Shipment Management: {e}")
+
 
 def check_shipping_status():
     try:
@@ -22,6 +42,7 @@ def check_shipping_status():
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred while checking shipping status: {e}")
 
+
 def view_shipping_history():
     try:
         root.withdraw()
@@ -30,6 +51,7 @@ def view_shipping_history():
         root.deiconify()
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred while viewing shipping history: {e}")
+
 
 def list_all_shipments():
     try:
@@ -40,6 +62,7 @@ def list_all_shipments():
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred while listing all shipments: {e}")
 
+
 def show_delivery_routes():
     try:
         root.withdraw()
@@ -49,6 +72,7 @@ def show_delivery_routes():
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred while showing delivery routes: {e}")
 
+
 def open_customer_management():
     try:
         root.withdraw()
@@ -57,6 +81,7 @@ def open_customer_management():
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred while opening Customer Management: {e}")
 
+
 def show_sorted_shipments():
     try:
         root.withdraw()
@@ -64,6 +89,7 @@ def show_sorted_shipments():
         root.deiconify()
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred while displaying sorted shipments: {e}")
+
 
 def center_window(window, width=600, height=400):
     try:
@@ -75,11 +101,13 @@ def center_window(window, width=600, height=400):
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred while centering the window: {e}")
 
+
 def on_closing():
     try:
         root.destroy()
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred while closing the application: {e}")
+
 
 def main():
     global root
@@ -101,6 +129,7 @@ def main():
         root.mainloop()
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred in the main function: {e}")
+
 
 if __name__ == "__main__":
     main()
